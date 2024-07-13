@@ -3,8 +3,6 @@ import sinon from 'sinon';
 import { Note } from '../../models/note.model.js';
 import { User } from '../../models/user.model.js';
 import { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes } from '../../controllers/notes.controller.js';
-import { ApiError } from '../../utils/apiError.js';
-import { ApiResponse } from '../../utils/apiResponse.js';
 
 describe('Note Controller Unit Tests', () => {
     afterEach(() => {
