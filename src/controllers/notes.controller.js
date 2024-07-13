@@ -249,3 +249,4 @@ const searchNotes = asyncHandler(async (req, res) => {
     }
 });
 
+export { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes };
