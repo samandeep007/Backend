@@ -18,7 +18,7 @@ const createNote = asyncHandler(async (req, res) => {
             tags: tags,
             archived: archived
         })
-    
+
         return res
             .status(200)
             .json(new ApiResponse(
@@ -46,8 +46,8 @@ const getCurrentNote = asyncHandler(async (req, res) => {
 
     const note = await Note.findOne({
         _id: noteId,
-        userId: req.user.id 
-    }); 
+        userId: req.user.id
+    });
 
     if (!note) {
         throw new ApiError(404, "Note not found");
@@ -68,7 +68,7 @@ const getAllNotes = asyncHandler(async (req, res) => {
         if (!notes.length) {
             return res.status(404).json(new ApiResponse(
                 404,
-               [],
+                [],
                 "Notes not found"
             ));
         }
@@ -87,9 +87,9 @@ const getAllNotes = asyncHandler(async (req, res) => {
     }
 });
 
-const updateNote = asyncHandler(async(req, res) => {
-    const {noteId} = req.params;
-    const [title, content, tags, archived, shared_with] = req.body;
+const updateNote = asyncHandler(async (req, res) => {
+    const { noteId } = req.params;
+    const {title, content, tags, archived, shared_with} = req.body;
     const updateDetails = {
         title: title,
         content: content,
@@ -98,18 +98,38 @@ const updateNote = asyncHandler(async(req, res) => {
         shared_with: shared_with
     };
 
-    const newDetails = Object.entries(updateDetails).filter(field => field[1]?.trim() === "");
-
-  try {
-      const note = await Note.findById(noteId);
-      if(!note){
-          throw new 
-      }
-     
-      for(const[key, value] of newDetails){
-          
-      } 
-  } catch (error) {
+    const validUpdates = Object.fromEntries(
+        Object.entries(updateDetails).filter(([key, value]) => value !== undefined && value !== "")
+    );
     
-  }
+
+    try {
+
+        const note = await Note.findById(noteId);
+
+        if (!note) {
+            throw new ApiError(404, "Note not found");
+        }
+
+        Object.assign(note, validUpdates);
+
+        await note.save({ validateBeforeSave: false });
+
+        return res.
+            status(200)
+            .json(
+                new ApiResponse(
+                    200,
+                    [],
+                    "note updated successfully"
+                )
+            )
+
+    } catch (error) {
+        throw new ApiError(
+            500,
+            error?.message || "Something went wrong while updating the note"
+        );
+
+    }
 })
