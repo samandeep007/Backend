@@ -1,4 +1,8 @@
 // tests/setupTests.js
+import '@babel/register'; // Ensure Babel is registered for transforming code
+
+// Optionally, add any setup code here, like global mocks or database setup
+
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 
@@ -19,3 +23,5 @@ beforeEach(() => {
     // Reset mocks if necessary
     jest.clearAllMocks();
 });
+
+
