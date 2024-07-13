@@ -13,9 +13,7 @@
     { "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"},
     
     "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/tests/setupTests.js"
-    ],
+    "setupFilesAfterEnv": ["<rootDir>/src/tests/setupBabel.js", "<rootDir>/src/tests/setupTests.js"],
     "testMatch": [
       "**/tests/**/*.test.js"
     ],
