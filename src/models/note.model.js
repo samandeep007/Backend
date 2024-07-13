@@ -9,7 +9,7 @@ const noteSchema = new Schema({
 
     title: {
         type: String,
-        required: [true, "Please provide a title for the note"],
+        required: true,
         trim: true,
     },
 
@@ -24,6 +24,8 @@ const noteSchema = new Schema({
         type: Boolean,
         default: false
     },
+
+    shared_with: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 
 }, {timestamps: true});
 
