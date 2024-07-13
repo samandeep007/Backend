@@ -64,7 +64,7 @@ const getCurrentNote = asyncHandler(async (req, res) => {
 
 const getAllNotes = asyncHandler(async (req, res) => {
     try {
-        const notes = await Note.find({ userId: req.user.id }); // Exclude sensitive fields if applicable
+        const notes = await Note.find({ userId: req.user.id }); 
 
         if (!notes.length) {
             return res.status(404).json(new ApiResponse(
