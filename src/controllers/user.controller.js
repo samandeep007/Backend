@@ -50,7 +50,7 @@ const registerUser = asyncHandler(async (req, res) => {
         username,
         email,
         fullName,
-        avatar: avatar?.url || `https://ui-avatars.com/api/?name=${fullName}` || '',
+        avatar: avatar?.url || `https://ui-avatars.com/api/?name=${fullName.split(" ").join("+")}` || '',
         password
     })
 
