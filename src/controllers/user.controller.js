@@ -10,10 +10,12 @@ const generateRefreshAndAccessTokens = async (id) => {
         const user = await User.findById(id);
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
-
+         
+        console.log("paaji mai ethe aaya")
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
-
+        console.log(accessToken)
+        console.log(refreshToken)
         return { accessToken, refreshToken };
 
     } catch (error) {
@@ -96,6 +98,7 @@ const loginUser = asyncHandler(async (req, res) => {
         secure: true
     };
 
+ 
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
