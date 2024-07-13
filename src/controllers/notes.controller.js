@@ -164,24 +164,24 @@ const deleteNote = asyncHandler(async(req, res) => {
 
 const shareNote = asyncHandler(async (req, res) => {
     const { id } = req.params;
-    const { userIdToShareWith } = req.body; // The user ID to share the note with
+    const { userIdToShareWith } = req.body;
 
     try {
-        // Find the note by ID
+  
         const note = await Note.findById(id);
 
         if (!note) {
             throw new ApiError(404, "Note not found");
         }
 
-        // Check if the user exists
+
         const user = await User.findById(userIdToShareWith);
 
         if (!user) {
             throw new ApiError(404, "User not found");
         }
 
-        // Check if the note is already shared with the user
+ 
         if (note.shared_with.includes(userIdToShareWith)) {
             return res.status(400).json(
                 new ApiResponse(
@@ -192,10 +192,10 @@ const shareNote = asyncHandler(async (req, res) => {
             );
         }
 
-        // Add user to the shared_with array
+
         note.shared_with.push(userIdToShareWith);
 
-        // Save the updated note
+
         await note.save();
 
         return res.status(200).json(
@@ -206,14 +206,46 @@ const shareNote = asyncHandler(async (req, res) => {
             )
         );
     } catch (error) {
-        return res.status(error.status || 500).json(
-            new ApiResponse(
-                error.status || 500,
-                [],
-                error.message || "Something went wrong while sharing the note"
-            )
+        throw new ApiError(
+            error.status || 500,
+            error.message || "Something went wrong while sharing the note"
         );
     }
 });
 
-export default shareNote;
+
+const searchNotes = asyncHandler(async (req, res) => {
+    const { query } = req.query; 
+
+    if (!query) {
+        throw new ApiError(400, "Query parameter is required");
+    }
+
+    try {
+        const searchRegex = new RegExp(query, 'i');
+
+        const notes = await Note.find({
+            $and: [
+                { $or: [
+                    { title: searchRegex },
+                    { content: searchRegex },
+                    { tags: searchRegex }
+                ]}
+            ]
+        });
+
+        return res.status(200).json(
+            new ApiResponse(
+                200,
+                notes,
+                "Search results"
+            )
+        );
+    } catch (error) {
+        throw new ApiError(
+            error.status || 500,
+            error.message || "Something went wrong while searching for notes"
+        );
+    }
+});
+
