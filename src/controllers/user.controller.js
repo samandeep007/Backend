@@ -263,4 +263,4 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   });
 
 
-export {registerUser, loginUser, logoutUser, refreshAccessToken, updateUserDetails, getCurrentUser, changePassword}
+export {registerUser, loginUser, logoutUser, refreshAccessToken, updateUserDetails, getCurrentUser, changePassword, generateRefreshAndAccessTokens}

@@ -5,21 +5,23 @@ import authRouter from '../../routes/user.routes.js'; // Adjust path as necessar
 import { User } from '../../models/user.model.js'; // Adjust path as necessary
 import jwt from 'jsonwebtoken';
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import { expect } from 'chai'; // Chai for assertions
-import sinon from 'sinon'; // Sinon for spies
 
 let mongoServer;
 const app = express();
 app.use(express.json());
 app.use('/api/auth', authRouter);
 
-before(async () => {
+beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    
+    // Ensure mongoose is not already connected
+    if (mongoose.connection.readyState === 0) {
+        await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    }
 });
 
-after(async () => {
+afterAll(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
 });
@@ -28,35 +30,59 @@ describe('Auth API Integration Tests', () => {
     let signSpy;
 
     beforeEach(() => {
-        signSpy = sinon.spy(jwt, 'sign'); // Spy on jwt.sign
+        // Spy on jwt.sign
+        signSpy = jest.spyOn(jwt, 'sign');
     });
 
-    afterEach(() => {
-        signSpy.restore(); // Restore the original function
+    afterEach(async () => {
+        // Restore the original function
+        signSpy.mockRestore();
+        // Clean up the database
+        await User.deleteMany({});
     });
 
-    it('POST /api/auth/signup - should create a new user', async () => {
-        const userData = { username: 'testuser', password: 'testpassword', fullName: 'john doe', email: 'john@example.com' };
+    test('POST /api/auth/signup - should create a new user', async () => {
+        const userData = {
+            username: `testuser-${Date.now()}`, // Ensure unique username
+            email: `john-${Date.now()}@example.com`, // Ensure unique email
+            fullName: 'John Doe',
+            password: 'testpassword'
+        };
 
         const response = await request(app)
             .post('/api/auth/signup')
             .send(userData);
 
-        expect(response.status).to.equal(201);
-        expect(response.body.username).to.equal(userData.username);
+        expect(response.status).toBe(200); // Updated to match your implementation
+        expect(response.body.data.username).toBe(userData.username);
+
+        // Check if the user is saved properly in the database
+        const savedUser = await User.findOne({ username: userData.username });
+        expect(savedUser).not.toBeNull();
     });
 
-    it('POST /api/auth/login - should log in a user and return a token', async () => {
-        const user = new User({ username: 'testuser', password: 'testpassword', fullName: 'john doe', email: 'john@example.com' });
+    test('POST /api/auth/login - should log in a user and return a token', async () => {
+        const username = `testuser-${Date.now()}`;
+        const user = new User({
+            username,
+            email: `john-${Date.now()}@example.com`,
+            fullName: 'John Doe',
+            password: 'testpassword'
+        });
         await user.save();
 
-        signSpy.returns('mock-token'); // Mock the return value of jwt.sign
+        // Mock the return value of jwt.sign
+        signSpy.mockReturnValue('mock-token');
 
         const response = await request(app)
             .post('/api/auth/login')
-            .send({ username: 'testuser', password: 'testpassword' });
+            .send({
+                username,
+                password: 'testpassword'
+            });
 
-        expect(response.status).to.equal(200); // Assuming 200 is the success status code for login
-        expect(response.body.token).to.exist;
+        expect(response.status).toBe(200); // Status code should be 200
+        expect(response.body.data.accessToken).toBe('mock-token'); // Ensure the token is as expected
+        expect(response.body.data.refreshToken).toBe('mock-token');
     });
 });

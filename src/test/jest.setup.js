@@ -5,20 +5,24 @@ import '@babel/register';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import sinon from 'sinon'; // Import Sinon for mocking
-import Mocha from 'mocha';
 
 let mongoServer;
 
+// Jest setup and teardown hooks
+beforeAll(async () => {
+    // Increase the timeout if needed
+    jest.setTimeout(60000);
 
-// Mocha hooks for setup and teardown
-before(async () => {
-    this.timeout(60000);
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
-    await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    
+    // Ensure mongoose is not already connected
+    if (mongoose.connection.readyState === 0) {
+        await mongoose.connect(uri);
+    }
 });
 
-after(async () => {
+afterAll(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
 });
