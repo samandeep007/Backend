@@ -5,15 +5,13 @@ import {
     getAllNotes,
     updateNote,
     deleteNote,
-    shareNote,
-    searchNotes
+    shareNote
 } from '../controllers/notes.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.route('/search')
-    .get(verifyJWT, searchNotes);
+
 
 router.route('/')
     .get(verifyJWT, getAllNotes)
