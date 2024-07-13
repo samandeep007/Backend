@@ -1,27 +1,26 @@
-// tests/setupTests.js
-import '@babel/register'; // Ensure Babel is registered for transforming code
+// Import @babel/register to transform code
+import '@babel/register';
 
-// Optionally, add any setup code here, like global mocks or database setup
-
+// Import necessary modules
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import sinon from 'sinon'; // Import Sinon for mocking
 
 let mongoServer;
 
-beforeAll(async () => {
+// Mocha hooks for setup and teardown
+before(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 });
 
-afterAll(async () => {
+after(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
 });
 
 beforeEach(() => {
     // Reset mocks if necessary
-    jest.clearAllMocks();
+    sinon.restore(); // Restore all sinon stubs and mocks
 });
-
-

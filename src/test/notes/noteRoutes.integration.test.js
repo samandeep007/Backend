@@ -5,19 +5,20 @@ import notesRouter from '../../routes/note.routes.js'; // Adjust path as necessa
 import { Note } from '../../models/note.model.js'; // Adjust path as necessary
 import { User } from '../../models/user.model.js'; // Adjust path as necessary
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { expect } from 'chai'; // Chai for assertions
 
 let mongoServer;
 const app = express();
 app.use(express.json());
 app.use('/api/notes', notesRouter);
 
-beforeAll(async () => {
+before(async () => {
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 });
 
-afterAll(async () => {
+after(async () => {
     await mongoose.disconnect();
     await mongoServer.stop();
 });
@@ -26,7 +27,7 @@ describe('Notes API Integration Tests', () => {
     let user;
 
     beforeEach(async () => {
-        user = new User({ username: 'testuser', password: 'testpassword', fullName: 'john doe', email: "john@example.com" });
+        user = new User({ username: 'testuser', password: 'testpassword', fullName: 'john doe', email: 'john@example.com' });
         await user.save();
     });
 
@@ -38,8 +39,8 @@ describe('Notes API Integration Tests', () => {
             .send(noteData)
             .set('Authorization', `Bearer ${user._id}`); // Mock JWT token
 
-        expect(response.status).toBe(201);
-        expect(response.body.title).toBe(noteData.title);
+        expect(response.status).to.equal(201);
+        expect(response.body.title).to.equal(noteData.title);
     });
 
     it('PUT /api/notes/:noteId - should update a note', async () => {
@@ -57,8 +58,8 @@ describe('Notes API Integration Tests', () => {
             .send(updatedNote)
             .set('Authorization', `Bearer ${user._id}`); // Mock JWT token
 
-        expect(response.status).toBe(200);
-        expect(response.body.title).toBe(updatedNote.title);
+        expect(response.status).to.equal(200);
+        expect(response.body.title).to.equal(updatedNote.title);
     });
 
     it('DELETE /api/notes/:noteId - should delete a note', async () => {
@@ -73,7 +74,7 @@ describe('Notes API Integration Tests', () => {
             .delete(`/api/notes/${note._id}`)
             .set('Authorization', `Bearer ${user._id}`); // Mock JWT token
 
-        expect(response.status).toBe(200);
-        expect(response.body.message).toBe('Note deleted successfully');
+        expect(response.status).to.equal(200);
+        expect(response.body.message).to.equal('Note deleted successfully');
     });
 });
