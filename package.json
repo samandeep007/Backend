@@ -5,10 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-      "test": "mocha --require @babel/register test/**/*.test.js",
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
   },
-
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,20 +22,5 @@
     "mongoose-aggregate-paginate-v2": "^1.1.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.24.8",
-    "@babel/plugin-transform-runtime": "^7.24.7",
-    "@babel/preset-env": "^7.24.8",
-    "@babel/preset-modules": "^0.1.6",
-    "@babel/register": "^7.24.6",
-    "babel-jest": "^29.7.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "chai": "^5.1.1",
-    "chai-http": "^5.0.0",
-    "jest": "^29.7.0",
-    "mocha": "^10.6.0",
-    "mongodb-memory-server": "^9.4.1",
-    "supertest": "^7.0.0"
   }
 }
