@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
-import authRouter from '../../routes/user.routes.js'; // Adjust path as necessary
-import { User } from '../../models/user.model.js'; // Adjust path as necessary
+import authRouter from '../../routes/user.routes.js'; 
+import { User } from '../../models/user.model.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -9,8 +9,8 @@ const app = express();
 app.use(express.json());
 app.use('/api/auth', authRouter);
 
-jest.mock('../../models/user.models'); // Mock User model
-jest.mock('bcrypt'); // Mock bcrypt
+jest.mock('../../models/user.model.js'); 
+jest.mock('bcrypt'); 
 jest.mock('jsonwebtoken', () => ({
     sign: jest.fn(),
     verify: jest.fn(),
