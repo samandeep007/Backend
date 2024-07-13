@@ -86,3 +86,30 @@ const getAllNotes = asyncHandler(async (req, res) => {
         );
     }
 });
+
+const updateNote = asyncHandler(async(req, res) => {
+    const {noteId} = req.params;
+    const [title, content, tags, archived, shared_with] = req.body;
+    const updateDetails = {
+        title: title,
+        content: content,
+        tags: tags,
+        archived: archived,
+        shared_with: shared_with
+    };
+
+    const newDetails = Object.entries(updateDetails).filter(field => field[1]?.trim() === "");
+
+  try {
+      const note = await Note.findById(noteId);
+      if(!note){
+          throw new 
+      }
+     
+      for(const[key, value] of newDetails){
+          
+      } 
+  } catch (error) {
+    
+  }
+})
