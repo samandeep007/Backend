@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha --timeout 10000",
-    "test:unit": "mocha test/unit/**/*.test.js --timeout 10000",
-    "test:integration": "mocha test/integration/**/*.test.js --timeout 10000",
+    "test": "mocha src/test --timeout 10000",
+    "test:unit": "mocha src/test/unit/**/*.test.js --timeout 10000",
+    "test:integration": "mocha src/test/integration/**/*.test.js --timeout 10000",
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
   },
   "author": "",
