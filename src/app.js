@@ -2,9 +2,19 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.routes.js';
+const rateLimit = require('express-rate-limit');
 // import noteRouter from './routes/note.routes.js';
 
 const app = express();
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
+    message: 'Too many requests from this IP, please try again later.',
+    headers: true,
+  });
+
+
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -12,6 +22,9 @@ app.use(cors({
 }));
 
 app.use(express.static('public'));
+
+
+app.use(limiter);
 
 
 app.use(express.json({
