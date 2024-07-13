@@ -4,7 +4,7 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { Note } from '../models/note.model.js';
 import {User} from '../models/user.model.js';
 
-//CRUD
+
 const createNote = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { title, content, tags, archived } = req.body;
