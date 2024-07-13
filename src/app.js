@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.routes.js';
-const rateLimit = require('express-rate-limit');
+import rateLimit from 'express-rate-limit';
 // import noteRouter from './routes/note.routes.js';
 
 const app = express();
