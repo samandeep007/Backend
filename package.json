@@ -9,7 +9,9 @@
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
   },
   "jest": {
-    "globalSetup": "<rootDir>/src/tests/setupBabel.js",
+    "transform":
+    { "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"},
+    
     "testEnvironment": "node",
     "setupFilesAfterEnv": [
       "<rootDir>/src/tests/setupTests.js"
@@ -18,10 +20,8 @@
       "**/tests/**/*.test.js"
     ],
     "coverageDirectory": "coverage",
-    "collectCoverage": true,
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
-    }
+    "collectCoverage": true
+    
   },
   "author": "",
   "license": "ISC",
