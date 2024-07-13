@@ -5,10 +5,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "mocha src/test --timeout 10000",
-    "test:unit": "mocha src/test/unit/**/*.test.js --timeout 10000",
-    "test:integration": "mocha src/test/integration/**/*.test.js --timeout 10000",
+   "test": "jest",
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setupTests.js"],
+    "testMatch": ["**/tests/**/*.test.js"],
+    "coverageDirectory": "coverage",
+    "collectCoverage": true
   },
   "author": "",
   "license": "ISC",
