@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
-      "test": "mocha --require @babel/register --reporter spec"
+    "test": "mocha --require @babel/register --reporter spec"
   },
   "author": "",
   "license": "ISC",

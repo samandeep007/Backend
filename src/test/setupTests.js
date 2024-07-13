@@ -1,15 +1,15 @@
-// Import @babel/register to transform code
-import '@babel/register';
-
 // Import necessary modules
-import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import sinon from 'sinon'; // Import Sinon for mocking
+require('@babel/register'); // Ensure Babel is registered for transforming code
+
+const mongoose = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const sinon = require('sinon'); // Import Sinon for mocking
 
 let mongoServer;
 
 // Mocha hooks for setup and teardown
-before(async () => {
+before(async function () {
+    this.timeout(60000); // Increase timeout to ensure MongoMemoryServer has enough time to start
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
     await mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
