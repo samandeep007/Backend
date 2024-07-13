@@ -215,25 +215,25 @@ const shareNote = asyncHandler(async (req, res) => {
 
 
 const searchNotes = asyncHandler(async (req, res) => {
-    const { query } = req.query; 
+    const { q } = req.query; 
 
-    if (!query) {
+    if (!q) {
         throw new ApiError(400, "Query parameter is required");
     }
 
     try {
-        const searchRegex = new RegExp(query, 'i');
+        const searchRegex = new RegExp(q, 'i');
 
         const notes = await Note.find({
-            $and: [
-                { $or: [
-                    { title: searchRegex },
-                    { content: searchRegex },
-                    { tags: searchRegex }
-                ]}
-            ]
+            $or: [
+                { title: searchRegex },
+                { content: searchRegex },
+                { tags: { $in: [searchRegex] } }
+            ],
+            userId: req.user.id
         });
 
+        
         return res.status(200).json(
             new ApiResponse(
                 200,

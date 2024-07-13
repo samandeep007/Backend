@@ -12,6 +12,9 @@ import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
+router.route('/search')
+    .get(verifyJWT, searchNotes);
+
 router.route('/')
     .get(verifyJWT, getAllNotes)
     .post(verifyJWT, createNote);
@@ -24,8 +27,5 @@ router.route('/:noteId')
 router.route('/:id/share')
     .post(verifyJWT, shareNote);
 
-
-router.route('/search')
-    .get(verifyJWT, searchNotes);
 
 export default router;
