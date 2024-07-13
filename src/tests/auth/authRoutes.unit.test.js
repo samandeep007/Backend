@@ -1,7 +1,7 @@
 import request from 'supertest';
 import express from 'express';
 import authRouter from '../../routes/user.routes.js'; // Adjust path as necessary
-import { User } from '../../models/user.models.js'; // Adjust path as necessary
+import { User } from '../../models/user.model.js'; // Adjust path as necessary
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
