@@ -12,20 +12,20 @@ import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.route('/api/notes')
+router.route('/')
     .get(verifyJWT, getAllNotes)
     .post(verifyJWT, createNote);
 
-router.route('/api/notes/:noteId')
+router.route('/:noteId')
     .get(verifyJWT, getCurrentNote)
     .put(verifyJWT, updateNote)
     .delete(verifyJWT, deleteNote);
 
-router.route('/api/notes/:id/share')
+router.route('/:id/share')
     .post(verifyJWT, shareNote);
 
 
-router.route('/api/search')
+router.route('/search')
     .get(verifyJWT, searchNotes);
 
 export default router;
