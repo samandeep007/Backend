@@ -3,7 +3,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.routes.js';
 import rateLimit from 'express-rate-limit';
-// import noteRouter from './routes/note.routes.js';
+import noteRouter from './routes/note.routes.js';
 
 const app = express();
 
@@ -39,6 +39,7 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 
 app.use("/api/auth/", userRouter);
+app.use("/api/notes/", noteRouter);
 
 
 export{app};

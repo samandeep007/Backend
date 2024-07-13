@@ -1,4 +1,4 @@
-import express from 'express';
+import {Router} from 'express';
 import {
     createNote,
     getCurrentNote,
@@ -10,6 +10,7 @@ import {
 } from '../controllers/notes.controller.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
+const router = Router();
 
 router.route('/api/notes')
     .get(verifyJWT, getAllNotes)
