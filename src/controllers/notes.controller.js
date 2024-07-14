@@ -6,15 +6,7 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { Note } from '../models/note.model.js';
 import { User } from '../models/user.model.js';
 
-/**
- * Creates a new note for the authenticated user.
- * @async
- * @function createNote
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If required fields are missing or if there's an error during note creation.
- * @returns {Promise<void>} A promise that resolves with the created note data in the response.
- */
+// Create a new note
 const createNote = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { title, content, tags, archived } = req.body;
@@ -50,15 +42,7 @@ const createNote = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Retrieves a specific note for the authenticated user.
- * @async
- * @function getCurrentNote
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If note ID is not provided or if the note is not found.
- * @returns {Promise<void>} A promise that resolves with the retrieved note data in the response.
- */
+// Get the current note
 const getCurrentNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
 
@@ -85,15 +69,7 @@ const getCurrentNote = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Retrieves all notes for the authenticated user.
- * @async
- * @function getAllNotes
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If there's an error during note retrieval.
- * @returns {Promise<void>} A promise that resolves with all notes data in the response.
- */
+// Get all notes
 const getAllNotes = asyncHandler(async (req, res) => {
     try {
         const notes = await Note.find({ userId: req.user.id });
@@ -122,15 +98,7 @@ const getAllNotes = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Updates a specific note for the authenticated user.
- * @async
- * @function updateNote
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If the note is not found or if there's an error during update.
- * @returns {Promise<void>} A promise that resolves with a success message in the response.
- */
+// Update a note
 const updateNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
     const { title, content, tags, archived, shared_with } = req.body;
@@ -174,15 +142,7 @@ const updateNote = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Deletes a specific note for the authenticated user.
- * @async
- * @function deleteNote
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If the note is not found or if there's an error during deletion.
- * @returns {Promise<void>} A promise that resolves with a success message in the response.
- */
+// Delete a note
 const deleteNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
     try {
@@ -210,16 +170,7 @@ const deleteNote = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Shares a note with another user.
- * @async
- * @function shareNote
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If the note or user is not found, or if there's an error during sharing.
- * @returns {Promise<void>} A promise that resolves with a success message in the response.
- */
-
+// Share a note with another user
 const shareNote = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { userIdToShareWith } = req.body;
@@ -270,15 +221,7 @@ const shareNote = asyncHandler(async (req, res) => {
 });
 
 
-/**
- * Searches for notes based on a query string.
- * @async
- * @function searchNotes
- * @param {Object} req - Express request object.
- * @param {Object} res - Express response object.
- * @throws {ApiError} If the query parameter is not provided or if there's an error during search.
- * @returns {Promise<void>} A promise that resolves with the search results in the response.
- */
+// Search notes
 const searchNotes = asyncHandler(async (req, res) => {
     const { q } = req.query;
 
