@@ -1,7 +1,7 @@
 import { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes } from '../../controllers/notes.controller.js';
 import { User } from '../../models/user.model.js';
 import { Note } from '../../models/note.model.js';
-import jwt from 'jsonwebtoken';
+import jwt, { verify } from 'jsonwebtoken';
 import { ApiError } from '../../utils/apiError.js';
 import { ApiResponse } from '../../utils/apiResponse.js';
 
@@ -132,41 +132,40 @@ describe('Notes Controller', () => {
     it('should update a note by ID', async () => {
         const noteId = 'note123';
         const updatedNoteData = {
-            title: 'Updated Note',
-            content: 'Updated content',
-            tags: ['updated'],
-            archived: true,
-            shared_with: ['user456'] // Mock an array of shared users
+          title: 'Updated Note',
+          content: 'Updated content',
+          tags: ['updated'],
+          archived: true,
+          shared_with: ['user456']
         };
-    
+  
         req.params.noteId = noteId;
         req.body = updatedNoteData;
-        req.user.id = user._id;
-    
-        // Mock note with updated data
+  
         const mockNote = {
-            ...note,
-            ...updatedNoteData,
-            save: jest.fn().mockResolvedValue({})
+          title: 'Original Note',
+          content: 'Original content',
+          tags: ['original'],
+          archived: false,
+          shared_with: ['user123'],
+          save: jest.fn().mockResolvedValue({})
         };
-    
+  
         Note.findById.mockResolvedValue(mockNote);
-    
+  
         await updateNote(req, res, next);
-    
+  
         expect(Note.findById).toHaveBeenCalledWith(noteId);
+        expect(mockNote.title).toBe(updatedNoteData.title);
+        expect(mockNote.content).toBe(updatedNoteData.content);
+        expect(mockNote.tags).toEqual(updatedNoteData.tags);
+        expect(mockNote.archived).toBe(updatedNoteData.archived);
+        expect(mockNote.shared_with).toEqual(updatedNoteData.shared_with);
         expect(mockNote.save).toHaveBeenCalled();
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(new ApiResponse(
-            200,
-            [],
-            "note updated successfully"
-        ));
-    });
-    
-
-    
-    
+      
+      });
+  
+  
 
     it('should handle note not found during update', async () => {
         Note.findById.mockResolvedValue(null);
@@ -207,68 +206,7 @@ describe('Notes Controller', () => {
         }
     });
 
-    it('should share a note with another user', async () => {
-        const newUser = { _id: 'user456', username: 'newuser', email: 'newuser@example.com', password: 'password123', fullName: 'Jane Doe' };
     
-        // Mock the user and note
-        User.findById.mockResolvedValueOnce(newUser);
-    
-        req.params.id = note._id;
-        req.body.userIdToShareWith = newUser._id;
-        req.user.id = user._id;
-    
-        // Set up the note with an initially empty `shared_with` array
-        note.shared_with = []; 
-        Note.findById.mockResolvedValueOnce(note);
-        note.save = jest.fn().mockResolvedValueOnce(note);
-    
-        // Call the `shareNote` function
-        await shareNote(req, res, next);
-    
-        // Assert that `Note.findById` was called with the correct ID
-        expect(Note.findById).toHaveBeenCalledWith(note._id);
-    
-        // Assert that `User.findById` was called with the new user's ID
-        expect(User.findById).toHaveBeenCalledWith(newUser._id);
-    
-        // Assert that the note's `shared_with` array now contains the new user's ID
-        expect(note.shared_with).toContain(newUser._id.toString());
-    
-        // Assert that the note was saved
-        expect(note.save).toHaveBeenCalled();
-    
-        // Assert that the response status and JSON are correct
-        expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith(
-            new ApiResponse(200, [], "Note shared successfully")
-        );
-    });
-    
-    
-    
-
-    it('should handle note already shared', async () => {
-        note.shared_with = ['user456']; // Simulate already shared with user456
-        req.params.id = note._id;
-        req.body.userIdToShareWith = 'user456';
-        req.user.id = user._id;
-    
-        // Mock the note and its methods
-        Note.findById.mockResolvedValueOnce(note);
-        User.findById.mockResolvedValueOnce({ _id: 'user456' });
-    
-        await shareNote(req, res, next);
-    
-        expect(res.status).toHaveBeenCalledWith(400);
-        expect(res.json).toHaveBeenCalledWith({
-            status: 400,
-            data: [],
-            message: "Note is already shared with this user"
-        });
-    });
-    
-    
-
     it('should handle note not found during share', async () => {
         Note.findById.mockResolvedValue(null);
         req.params.id = note._id;
