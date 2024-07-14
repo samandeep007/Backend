@@ -78,7 +78,7 @@ const router = Router();
  *       - bearerAuth: []
  *     responses:
  *       200:
- *         description: The list of the notes
+ *         description: The list of notes
  *         content:
  *           application/json:
  *             schema:
@@ -95,9 +95,31 @@ const router = Router();
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
- *             $ref: '#/components/schemas/Note'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: ""
+ *                 description: The title of the note
+ *               content:
+ *                 type: string
+ *                 example: ""
+ *                 description: The content of the note
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   example: ""
+ *                 description: Tags associated with the note
+ *               archived:
+ *                 type: boolean
+ *                example: false
+ *                 description: Indicates if the note is archived
+ *             required:
+ *               - title
+ *               - content
  *     responses:
  *       201:
  *         description: The note was successfully created
@@ -110,6 +132,7 @@ const router = Router();
  *       500:
  *         description: Some server error
  */
+
 router.route('/')
     .get(verifyJWT, getAllNotes)
     .post(verifyJWT, createNote);
