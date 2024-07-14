@@ -65,12 +65,16 @@ const router = Router();
  *             properties:
  *               username:
  *                 type: string
+ *                 example: ""
  *               email:
  *                 type: string
+ *                  example: ""
  *               fullName:
  *                 type: string
+ *                  example: ""
  *               password:
  *                 type: string
+ *                  example: ""
  *               avatar:
  *                 type: string
  *                 format: binary
