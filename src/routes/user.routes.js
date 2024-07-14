@@ -68,13 +68,13 @@ const router = Router();
  *                 example: ""
  *               email:
  *                 type: string
- *                  example: ""
+ *                 example: ""
  *               fullName:
  *                 type: string
- *                  example: ""
+ *                 example: ""
  *               password:
  *                 type: string
- *                  example: ""
+ *                 example: ""
  *               avatar:
  *                 type: string
  *                 format: binary
