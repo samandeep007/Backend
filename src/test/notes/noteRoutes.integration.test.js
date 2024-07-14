@@ -90,7 +90,7 @@ describe('Notes API', () => {
         expect(deletedNote).toBeNull();
     });
 
-    it('should share a note with another user', async () => {
+     it('should share a note with another user', async () => {
         const note = await Note.create({ userId, title: 'Share Test Note', content: 'This is a test note to share.', tags: ['test'], archived: false });
         const newUser = new User({ username: 'newuser2', email: 'newuser2@example.com', password: 'password123', fullName: "John Doe" });
         await newUser.save();
