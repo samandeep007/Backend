@@ -55,13 +55,10 @@ const router = Router();
  *           format: date-time
  *           description: The date and time the note was last updated
  *       example:
- *         id: d5fE_asz
- *         userId: 5f8f8f8f8f8f8f8f8f8f8f8
  *         title: Note Title
  *         content: Note content
  *         tags: ["tag1", "tag2"]
  *         archived: false
- *         shared_with: ["5f8f8f8f8f8f8f8f8f8f8f8"]
  */
 
 /**
