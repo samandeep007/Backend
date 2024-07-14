@@ -1,8 +1,8 @@
 import request from 'supertest';
 import express from 'express';
 import mongoose from 'mongoose';
-import authRouter from '../../routes/user.routes.js'; // Adjust path as necessary
-import { User } from '../../models/user.model.js'; // Adjust path as necessary
+import authRouter from '../routes/user.routes.js'; // Adjust path as necessary
+import { User } from '../models/user.model.js'; // Adjust path as necessary
 import jwt from 'jsonwebtoken';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 

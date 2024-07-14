@@ -1,15 +1,15 @@
-import { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes } from '../../controllers/notes.controller.js';
-import { User } from '../../models/user.model.js';
-import { Note } from '../../models/note.model.js';
+import { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes } from '../controllers/notes.controller.js';
+import { User } from '../models/user.model.js';
+import { Note } from '../models/note.model.js';
 import jwt, { verify } from 'jsonwebtoken';
-import { ApiError } from '../../utils/apiError.js';
-import { ApiResponse } from '../../utils/apiResponse.js';
+import { ApiError } from '../utils/apiError.js';
+import { ApiResponse } from '../utils/apiResponse.js';
 
-jest.mock('../../models/user.model.js');
-jest.mock('../../models/note.model.js');
+jest.mock('../models/user.model.js');
+jest.mock('../models/note.model.js');
 jest.mock('jsonwebtoken');
-jest.mock('../../utils/apiError.js');
-jest.mock('../../utils/apiResponse.js');
+jest.mock('../utils/apiError.js');
+jest.mock('../utils/apiResponse.js');
 
 describe('Notes Controller', () => {
     let req, res, next, user, note, accessToken;

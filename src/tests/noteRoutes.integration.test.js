@@ -2,9 +2,9 @@ import request from 'supertest';
 import mongoose from 'mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import jwt from 'jsonwebtoken';
-import {app} from '../../app.js'; // Assuming you export your express app from app.js or index.js
-import { User } from '../../models/user.model.js';
-import { Note } from '../../models/note.model.js';
+import {app} from '../app.js'; // Assuming you export your express app from app.js or index.js
+import { User } from '../models/user.model.js';
+import { Note } from '../models/note.model.js';
 import "dotenv/config";
 
 
