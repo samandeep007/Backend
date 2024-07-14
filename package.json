@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules index.js",
-    "test": "jest -experimental-vm-modules "
+    "test": "jest -experimental-vm-modules ",
+     "build": "echo 'No build step required'"
   },
   "jest": {
     "testEnvironment": "node",
