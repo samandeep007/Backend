@@ -115,7 +115,7 @@ const router = Router();
  *                 description: Tags associated with the note
  *               archived:
  *                 type: boolean
- *                example: false
+ *                 example: false
  *                 description: Indicates if the note is archived
  *             required:
  *               - title
