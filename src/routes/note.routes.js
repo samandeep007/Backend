@@ -262,13 +262,16 @@ router.route('/:noteId')
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:
  *               userIdToShareWith:
  *                 type: string
+ *                 example: ""
  *                 description: The id of the user to share the note with
+ *             example:
+ *               userIdToShareWith: ""
  *     responses:
  *       200:
  *         description: The note was shared
@@ -279,6 +282,7 @@ router.route('/:noteId')
  *       400:
  *         description: Note is already shared with this user
  */
+
 router.route('/:id/share')
     .post(verifyJWT, shareNote);
 
