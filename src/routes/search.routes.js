@@ -4,6 +4,7 @@ import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
+// Search notes for a specific user
 router.route('/')
     .get(verifyJWT, searchNotes);
 

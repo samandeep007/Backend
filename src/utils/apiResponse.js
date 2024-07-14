@@ -1,3 +1,5 @@
+// to be used in the controllers to send standardized responses to the client
+
 class ApiResponse {
   constructor(statusCode, data, message  = "Success") {
     this.statusCode = statusCode;

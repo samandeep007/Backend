@@ -12,7 +12,7 @@ import { verifyJWT } from '../middlewares/auth.middleware.js';
 const router = Router();
 
 
-
+// CRUD operations for notes for a specific user 
 router.route('/')
     .get(verifyJWT, getAllNotes)
     .post(verifyJWT, createNote);

@@ -5,25 +5,29 @@ import { User } from "../models/user.model.js";
 
 export const verifyJWT = asyncHandler(async (req, _, next) => {
   try {
-    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "") // get token from cookies or header
+    // get token from cookies or header
+    const token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer ", "") 
 
-    if (!token) { // if token is not present in cookies or header then throw error 
+    // if token is not present in cookies or header then throw error 
+    if (!token) { 
       throw new ApiError(401, "Unauthorized Request");
     }
 
-
-    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); // verify the token
+    // verify the token
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET); 
 
     
-
-    const user = await User.findById(decodedToken?._id).select( // find user by id and select only required fields
+    // find user by id and select only required fields
+    const user = await User.findById(decodedToken?._id).select( 
       "-password -refreshToken"
     );
 
+    // if user not found then throw error
     if (!user) {
       throw new ApiError(401, "Invalid Access Token");
     }
 
+    // if user found then set it to request object and move to next middleware
     req.user = user;
     next();
   } catch (error) {
