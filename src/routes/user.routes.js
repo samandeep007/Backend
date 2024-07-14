@@ -144,18 +144,9 @@ router.route("/logout").post(verifyJWT, logoutUser);
 /**
  * @swagger
  *  /api/auth/refresh-token:
- *   post:
+ *   get:
  *     summary: Refresh access token
  *     tags: [Users]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               refreshToken:
- *                 type: string
  *     responses:
  *       200:
  *         description: Access token refreshed
@@ -166,7 +157,9 @@ router.route("/logout").post(verifyJWT, logoutUser);
  *       401:
  *         description: Unauthorized request or invalid refresh token
  */
-router.route("/refresh-token").post(refreshAccessToken);
+
+
+router.route("/refresh-token").get(refreshAccessToken);
 
 /**
  * @swagger

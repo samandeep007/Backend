@@ -11,9 +11,9 @@ const generateRefreshAndAccessTokens = async (id) => {
         const user = await User.findById(id);
         const accessToken = user.generateAccessToken();
         const refreshToken = user.generateRefreshToken();
-    
+
         user.refreshToken = refreshToken;
-        
+
         await user.save({ validateBeforeSave: false });
 
         return { accessToken, refreshToken };
@@ -205,80 +205,79 @@ const updateUserDetails = asyncHandler(async (req, res) => {
         avatar: avatarLocalPath
     }
     const newUserDetails = Object.entries(userDetails).filter(field => field[1]?.trim() !== "");
-   try {
-     const user = await User.findById(req.user.id);
-     for (const [key, value] of newUserDetails) {
-        if (key === "avatar" && avatarLocalPath) {
-            const avatar = await uploadOnCloudinary(value);
-            user.avatar = avatar.url;
-        } else {
-            user[key] = value;
+    try {
+        const user = await User.findById(req.user.id);
+        for (const [key, value] of newUserDetails) {
+            if (key === "avatar" && avatarLocalPath) {
+                const avatar = await uploadOnCloudinary(value);
+                user.avatar = avatar.url;
+            } else {
+                user[key] = value;
+            }
         }
+        await user.save({ validateBeforeSave: false });
+        return res
+            .status(200)
+            .json(new ApiResponse(
+                200,
+                {},
+                "User details update successfully"
+            ));
+    } catch (error) {
+        throw new ApiError(400, "Something went wrong while updating the user details");
     }
-     await user.save({ validateBeforeSave: false });
-     return res
-     .status(200)
-     .json(new ApiResponse(
-         200,
-         {},
-         "User details update successfully"
-     ));
-   } catch (error) {
-      throw new ApiError(400, "Something went wrong while updating the user details");
-   }
 });
 
 // Controller function to refresh access token
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken =
-      req.cookies.refreshToken || req.body.refreshToken;
-  
+    const incomingRefreshToken = req.cookies.refreshToken;
+
     if (!incomingRefreshToken) {
-      throw new ApiError(402, "unauthorized request");
+        throw new ApiError(402, "unauthorized request");
     }
-  
+
     try {
-      const decodedToken = jwt.verify(
-        incomingRefreshToken,
-        process.env.REFRESH_TOKEN_SECRET
-      );
-  
-      const user = await User.findById(decodedToken?._id);
-  
-      if (!user) {
-        throw new ApiError(401, "Invalid refresh token");
-      }
-  
-      if (incomingRefreshToken !== user?.refreshToken) {
-        throw new ApiError(401, "Refresh token is expired or used");
-      }
-  
-      const options = {
-        httpOnly: true,
-        secure: true,
-      };
-  
-      const { accessToken, newRefreshToken } =
-        await generateAccessAndRefreshTokens(user._id);
-  
-      return res
-        .status(200)
-        .cookie("accessToken", accessToken, options)
-        .cookie("refreshToken", newRefreshToken, options)
-        .json(
-          new ApiResponse(
-            200,
-            { accessToken, newRefreshToken },
-            "Access token refreshed"
-          )
+        const decodedToken = jwt.verify(
+            incomingRefreshToken,
+            process.env.REFRESH_TOKEN_SECRET
         );
+
+        const user = await User.findById(decodedToken?._id);
+
+        if (!user) {
+            throw new ApiError(401, "Invalid refresh token");
+        }
+
+        if (incomingRefreshToken !== user?.refreshToken) {
+            throw new ApiError(401, "Refresh token is expired or used");
+        }
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+        };
+
+        const { accessToken, newRefreshToken } =
+            await generateRefreshAndAccessTokens(user._id);
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", newRefreshToken, options)
+            .json(
+                new ApiResponse(
+                    200,
+                    { accessToken, newRefreshToken },
+                    "Access token refreshed"
+                )
+            );
     } catch (error) {
-      throw new ApiError(
-        401,
-        error?.message || "Something went wrong while refreshing token!"
-      );
+        throw new ApiError(
+            401,
+            error?.message || "Something went wrong while refreshing token!"
+        );
     }
-  });
+});
 
 
-export {registerUser, loginUser, logoutUser, refreshAccessToken, updateUserDetails, getCurrentUser, changePassword, generateRefreshAndAccessTokens}
+export { registerUser, loginUser, logoutUser, refreshAccessToken, updateUserDetails, getCurrentUser, changePassword, generateRefreshAndAccessTokens }
