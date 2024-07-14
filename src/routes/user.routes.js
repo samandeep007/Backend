@@ -109,9 +109,10 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
  *                 example: ""
  *               password:
  *                 type: string
+ *                 example: ""
  *             required:
  *               - password
- *                 example: ""
+ *        
  *             oneOf:
  *               - required: [email]
  *               - required: [username]
