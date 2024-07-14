@@ -103,12 +103,15 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
  *             properties:
  *               email:
  *                 type: string
+ *                 example: ""
  *               username:
  *                 type: string
+ *                 example: ""
  *               password:
  *                 type: string
  *             required:
  *               - password
+ *                 example: ""
  *             oneOf:
  *               - required: [email]
  *               - required: [username]
@@ -145,7 +148,7 @@ router.route("/login").post(loginUser);
  *             schema:
  *               $ref: '#/components/schemas/ApiResponse'
  */
-router.route("/logout").post(verifyJWT, logoutUser); 
+router.route("/logout").post(verifyJWT, logoutUser);
 
 /**
  * @swagger
