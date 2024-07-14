@@ -1,5 +1,3 @@
-
-
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/apiError.js';
 import { ApiResponse } from '../utils/apiResponse.js';
@@ -257,4 +255,4 @@ const searchNotes = asyncHandler(async (req, res) => {
     }
 });
 
-export { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes };/**
+export { createNote, getCurrentNote, getAllNotes, updateNote, deleteNote, shareNote, searchNotes };
