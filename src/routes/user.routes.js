@@ -103,13 +103,10 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
  *             properties:
  *               email:
  *                 type: string
- *                 description: The user's email address
  *               username:
  *                 type: string
- *                 description: The user's username
  *               password:
  *                 type: string
- *                 description: The user's password
  *             required:
  *               - password
  *             oneOf:
