@@ -46,6 +46,7 @@ Selected for reliability, community support, and project-specific needs.
 
 ```
 PORT = your_local_port
+BASE_URL = http://localhost:3000 
 MONGODB_URI = your_mongodb_uri
 CORS_ORIGIN = *
 
