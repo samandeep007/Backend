@@ -8,10 +8,35 @@ import {
     changePassword,
     getCurrentUser
 } from '../controllers/user.controller.js';
-import { upload } from '../middlewares/multer.middleware.js'
+import { upload } from '../middlewares/multer.middleware.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 
 const router = Router();
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ApiResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *           description: Indicates whether the request was successful
+ *         message:
+ *           type: string
+ *           description: A message providing additional information about the response
+ *         data:
+ *           type: object
+ *           description: The data payload (optional, depending on the endpoint)
+ *       example:
+ *         success: true
+ *         message: Operation successful
+ *         data:
+ *           userId: "12345"
+ *           username: "exampleUser"
+ *           email: "user@example.com"
+ */
 
 /**
  * @swagger
@@ -22,7 +47,7 @@ const router = Router();
 
 /**
  * @swagger
- * /signup:
+ * /api/auth/signup:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
@@ -65,7 +90,7 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
 
 /**
  * @swagger
- * /login:
+ *  /api/auth/login:
  *   post:
  *     summary: Log in a user
  *     tags: [Users]
@@ -100,7 +125,7 @@ router.route("/login").post(loginUser);
 
 /**
  * @swagger
- * /logout:
+ *  /api/auth/logout:
  *   post:
  *     summary: Log out a user
  *     tags: [Users]
@@ -118,7 +143,7 @@ router.route("/logout").post(verifyJWT, logoutUser);
 
 /**
  * @swagger
- * /refresh-token:
+ *  /api/auth/refresh-token:
  *   post:
  *     summary: Refresh access token
  *     tags: [Users]
@@ -145,7 +170,7 @@ router.route("/refresh-token").post(refreshAccessToken);
 
 /**
  * @swagger
- * /change-password:
+ *  /api/auth/change-password:
  *   post:
  *     summary: Change user password
  *     tags: [Users]
@@ -178,7 +203,7 @@ router.route("/change-password").post(verifyJWT, changePassword);
 
 /**
  * @swagger
- * /current-user:
+ *  /api/auth/current-user:
  *   get:
  *     summary: Get current user details
  *     tags: [Users]
@@ -196,7 +221,7 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
 
 /**
  * @swagger
- * /update-account:
+ *  /api/auth/update-account:
  *   patch:
  *     summary: Update user details
  *     tags: [Users]
