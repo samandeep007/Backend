@@ -6,10 +6,10 @@ const router = Router();
 
 /**
  * @swagger
- * /api/:
+ * /api/search:
  *   get:
  *     summary: Search notes
- *     description: Search for notes based on query parameters. Requires a valid JWT token for authentication. The query parameter is required.
+ *     description: Search for notes based on a query parameter. Requires a valid JWT token for authentication. The query parameter `q` is required.
  *     tags:
  *       - Notes
  *     parameters:
@@ -55,14 +55,14 @@ const router = Router();
  *                   type: string
  *                   example: "Search results"
  *       400:
- *         description: Bad Request. Query parameter is required.
+ *         description: Bad Request. Query parameter `q` is required.
  *       401:
  *         description: Unauthorized. Invalid or missing JWT token.
  *       500:
  *         description: Internal server error. Something went wrong while searching for notes.
  */
 
-router.route('/')
+router.route('/api/search')
     .get(verifyJWT, searchNotes);
 
 export default router;
