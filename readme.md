@@ -95,6 +95,13 @@ npm test
 - `POST /api/auth/signup`: Create a new user account.
 - `POST /api/auth/login`: Log in to an existing user account and receive an access token.
 
+### Protected auth routes
+- `POST /api/auth/logout`: Log out the current user.
+- `POST /api/auth/refresh-token`: Refresh the access token.
+- `POST /api/auth/change-password`: Change the password for the current user.
+- `GET /api/auth/current-user`: Get the details of the current user.
+- `PATCH /api/auth/update-account`: Update the details of the current user, including uploading an avatar image.
+
 
 ### Note Endpoints
 
@@ -108,6 +115,3 @@ npm test
 
 All note endpoints require authentication. Make sure to include the access token in the request header.
 
-## Development
-
-For development, the application uses `nodemon` to automatically restart the server when changes are detected. You can start the development server with:
