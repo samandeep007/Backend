@@ -178,9 +178,33 @@ router.route('/')
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
- *             $ref: '#/components/schemas/Note'
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: ""
+ *                 description: The title of the note
+ *               content:
+ *                 type: string
+ *                 example: ""
+ *                 description: The content of the note
+ *               tags:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                   example: ""
+ *                 description: Tags associated with the note
+ *               archived:
+ *                 type: boolean
+ *                 example: false
+ *                 description: Indicates if the note is archived
+ *             example:
+ *               title: "Updated Note Title"
+ *               content: "Updated content for the note."
+ *               tags: ["updated", "example"]
+ *               archived: true
  *     responses:
  *       200:
  *         description: The note was updated
@@ -214,6 +238,7 @@ router.route('/')
  *       404:
  *         description: The note was not found
  */
+
 router.route('/:noteId')
     .get(verifyJWT, getCurrentNote)
     .put(verifyJWT, updateNote)
