@@ -19,8 +19,6 @@ We chose Express.js for this Notes API application due to its:
 
 ## Dependencies
 
-## Dependencies
-
 Key dependencies for our Node.js application:
 
 - **Express.js**: Web application framework for its simplicity and robust features
