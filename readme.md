@@ -68,7 +68,7 @@ CLOUDINARY_API_SECRET = api_secret
 
 4. Start the server 
 ```bash 
-npm run dev
+node index
 ```
 The server should now be running on `http://localhost:3000`.
 
