@@ -177,7 +177,7 @@ router.route("/refresh-token").get(refreshAccessToken);
 
 /**
  * @swagger
- *  /api/auth/change-password:
+ * /api/auth/change-password:
  *   post:
  *     summary: Change user password
  *     tags: [Users]
@@ -186,14 +186,18 @@ router.route("/refresh-token").get(refreshAccessToken);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:
  *               currentPassword:
  *                 type: string
+ *                 description: The current password of the user
+ *                 example: ""
  *               newPassword:
  *                 type: string
+ *                 description: The new password for the user
+ *                 example: ""
  *     responses:
  *       200:
  *         description: Password changed successfully
@@ -206,6 +210,7 @@ router.route("/refresh-token").get(refreshAccessToken);
  *       401:
  *         description: Authentication failed | Wrong password
  */
+
 router.route("/change-password").post(verifyJWT, changePassword);
 
 /**
