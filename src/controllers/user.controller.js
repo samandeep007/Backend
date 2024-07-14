@@ -170,7 +170,7 @@ const changePassword = asyncHandler(async (req, res) => {
         }
 
         // Update the password and save the user
-        user.password(newPassword);
+        user.password = newPassword;
         await user.save({ validateBeforeSave: false });
 
         return res
