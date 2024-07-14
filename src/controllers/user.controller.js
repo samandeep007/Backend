@@ -160,7 +160,7 @@ const changePassword = asyncHandler(async (req, res) => {
     }
 
     try {
-        const user = await User.findById(req?.user.id);
+        const user = await User.findById(req.user.id);
 
         // Check if the current password is correct
         const isValidPassword = await user.isPasswordCorrect(currentPassword);
