@@ -236,8 +236,10 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
  *             properties:
  *               fullName:
  *                 type: string
+ *                 example: ""
  *               username:
  *                 type: string
+ *                 example: ""
  *               avatar:
  *                 type: string
  *                 format: binary
@@ -251,6 +253,7 @@ router.route("/current-user").get(verifyJWT, getCurrentUser);
  *       400:
  *         description: Something went wrong while updating the user details
  */
+
 router.route("/update-account").patch(verifyJWT, upload.single('avatar'), updateUserDetails);
 
 export default router;
