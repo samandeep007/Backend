@@ -92,21 +92,29 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
  * @swagger
  *  /api/auth/login:
  *   post:
- *     summary: Log in a user
+ *     summary: Log in a user (either by email or username)
  *     tags: [Users]
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/x-www-form-urlencoded:
  *           schema:
  *             type: object
  *             properties:
  *               email:
  *                 type: string
+ *                 description: The user's email address
  *               username:
  *                 type: string
+ *                 description: The user's username
  *               password:
  *                 type: string
+ *                 description: The user's password
+ *             required:
+ *               - password
+ *             oneOf:
+ *               - required: [email]
+ *               - required: [username]
  *     responses:
  *       200:
  *         description: User logged in successfully
@@ -121,6 +129,7 @@ router.route("/signup").post(upload.single('avatar'), registerUser);
  *       400:
  *         description: Username or email required
  */
+
 router.route("/login").post(loginUser);
 
 /**
