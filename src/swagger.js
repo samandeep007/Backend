@@ -12,7 +12,7 @@ const options = {
     },
     servers: [
       {
-        url: process.env.BASE_URL, // Change this to your server's URL
+        url: process.env.BASE_URL,
       },
     ],
   },
