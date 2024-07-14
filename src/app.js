@@ -5,8 +5,10 @@ import userRouter from './routes/user.routes.js';
 import rateLimit from 'express-rate-limit';
 import noteRouter from './routes/note.routes.js';
 import searchRouter from './routes/search.routes.js';
+import setupSwagger from './swagger.js';
 
 const app = express();
+setupSwagger(app);
 
 // Limit requests to a maximum of 100 requests per minute per IP address
 const limiter = rateLimit({
