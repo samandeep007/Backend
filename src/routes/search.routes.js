@@ -62,7 +62,7 @@ const router = Router();
  *         description: Internal server error. Something went wrong while searching for notes.
  */
 
-router.route('/api/search')
+router.route('/')
     .get(verifyJWT, searchNotes);
 
 export default router;
