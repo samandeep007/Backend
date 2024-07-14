@@ -4,13 +4,16 @@ import { ApiResponse } from '../utils/apiResponse.js';
 import { Note } from '../models/note.model.js';
 import { User } from '../models/user.model.js';
 
-
+// Create a new note
 const createNote = asyncHandler(async (req, res) => {
     const userId = req.user.id;
     const { title, content, tags, archived } = req.body;
+
+    // Check if required fields are missing
     if (!title || !content) {
         throw new ApiError(400, "Required fields are missing");
     }
+
     try {
         const note = await Note.create({
             userId: userId,
@@ -18,7 +21,7 @@ const createNote = asyncHandler(async (req, res) => {
             content: content,
             tags: tags,
             archived: archived
-        })
+        });
 
         return res
             .status(200)
@@ -26,21 +29,22 @@ const createNote = asyncHandler(async (req, res) => {
                 200,
                 note,
                 "Note created successfully"
-            ))
+            ));
 
     } catch (error) {
         throw new ApiError(
             error.status || 400,
             error.message || "Something went wrong while creating the note"
-        )
+        );
     }
-})
+});
 
 
+// Get the current note
 const getCurrentNote = asyncHandler(async (req, res) => {
-
     const { noteId } = req.params;
 
+    // Check if note ID is provided
     if (!noteId) {
         throw new ApiError(400, "Note ID is required");
     }
@@ -50,6 +54,7 @@ const getCurrentNote = asyncHandler(async (req, res) => {
         userId: req.user.id
     });
 
+    // Check if note is found
     if (!note) {
         throw new ApiError(404, "Note not found");
     }
@@ -62,10 +67,12 @@ const getCurrentNote = asyncHandler(async (req, res) => {
 });
 
 
+// Get all notes
 const getAllNotes = asyncHandler(async (req, res) => {
     try {
         const notes = await Note.find({ userId: req.user.id });
 
+        // Check if notes are found
         if (!notes.length) {
             return res.status(404).json(new ApiResponse(
                 404,
@@ -88,6 +95,8 @@ const getAllNotes = asyncHandler(async (req, res) => {
     }
 });
 
+
+// Update a note
 const updateNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
     const { title, content, tags, archived, shared_with } = req.body;
@@ -103,11 +112,10 @@ const updateNote = asyncHandler(async (req, res) => {
         Object.entries(updateDetails).filter(([key, value]) => value !== undefined && value !== "")
     );
 
-
     try {
-
         const note = await Note.findById(noteId);
 
+        // Check if note is found
         if (!note) {
             throw new ApiError(404, "Note not found");
         }
@@ -122,7 +130,6 @@ const updateNote = asyncHandler(async (req, res) => {
             "Note updated successfully"
         ));
 
-
     } catch (error) {
         throw new ApiError(
             500,
@@ -130,14 +137,16 @@ const updateNote = asyncHandler(async (req, res) => {
         );
 
     }
-})
+});
 
 
+// Delete a note
 const deleteNote = asyncHandler(async (req, res) => {
     const { noteId } = req.params;
     try {
-        const note = await Note.findByIdAndDelete(noteId)
+        const note = await Note.findByIdAndDelete(noteId);
 
+        // Check if note is found
         if (!note) {
             throw new ApiError(404, "Note not found");
         }
@@ -154,31 +163,32 @@ const deleteNote = asyncHandler(async (req, res) => {
         throw new ApiError(
             error.status || 500,
             error.message || "Something went wrong while deleting the note"
-        )
+        );
     }
-})
+});
 
 
+// Share a note with another user
 const shareNote = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const { userIdToShareWith } = req.body;
 
     try {
-
         const note = await Note.findById(id);
 
+        // Check if note is found
         if (!note) {
             throw new ApiError(404, "Note not found");
         }
 
-
         const user = await User.findById(userIdToShareWith);
 
+        // Check if user is found
         if (!user) {
             throw new ApiError(404, "User not found");
         }
 
-
+        // Check if note is already shared with the user
         if (note.shared_with.includes(userIdToShareWith)) {
             return res.status(400).json(
                 new ApiResponse(
@@ -189,9 +199,7 @@ const shareNote = asyncHandler(async (req, res) => {
             );
         }
 
-
         note.shared_with.push(userIdToShareWith);
-
 
         await note.save();
 
@@ -211,9 +219,11 @@ const shareNote = asyncHandler(async (req, res) => {
 });
 
 
+// Search notes
 const searchNotes = asyncHandler(async (req, res) => {
     const { q } = req.query;
 
+    // Check if query parameter is provided
     if (!q) {
         throw new ApiError(400, "Query parameter is required");
     }
@@ -229,7 +239,6 @@ const searchNotes = asyncHandler(async (req, res) => {
             ],
             userId: req.user.id
         });
-
 
         return res.status(200).json(
             new ApiResponse(

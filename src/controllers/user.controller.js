@@ -5,6 +5,7 @@ import { uploadOnCloudinary } from '../utils/cloudinary.js';
 import { User } from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
 
+// Function to generate refresh and access tokens for a user
 const generateRefreshAndAccessTokens = async (id) => {
     try {
         const user = await User.findById(id);
@@ -23,17 +24,19 @@ const generateRefreshAndAccessTokens = async (id) => {
     }
 }
 
+// Controller function to register a new user
 const registerUser = asyncHandler(async (req, res) => {
 
     const { username, email, fullName, password } = req.body;
 
+    // Check if all required fields are provided
     if (
         [username, email, fullName, password].filter(field => field?.trim() === "").length > 0
     ) {
         throw new ApiError(404, "All fields are required");
     }
 
-  
+    // Check if user with the same email or username already exists
     const isExistingUser = await User.findOne({
         $or: [{ email }, { username }]
     });
@@ -42,11 +45,12 @@ const registerUser = asyncHandler(async (req, res) => {
         throw new ApiError(409, "User with these credentials already exists");
     }
 
-
     let avatarLocalPath = req.file?.path;
 
+    // Upload avatar image to Cloudinary and get the URL
     const avatar = avatarLocalPath ? await uploadOnCloudinary(avatarLocalPath) : {};
 
+    // Create a new user
     const user = await User.create({
         username,
         email,
@@ -55,6 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
         password
     })
 
+    // Fetch the created user without password and refresh token
     const createdUser = await User.findById(user._id).select("-password -refreshToken")
 
     if (!createdUser) {
@@ -68,12 +73,14 @@ const registerUser = asyncHandler(async (req, res) => {
 
 
 
+// Controller function to login a user
 const loginUser = asyncHandler(async (req, res) => {
     const { email, username, password } = req.body;
     if (!email && !username) {
         throw new ApiError(400, "Username or email required");
     }
 
+    // Find the user by email or username
     const user = await User.findOne({
         $or: [{ email }, { username }]
     })
@@ -82,14 +89,17 @@ const loginUser = asyncHandler(async (req, res) => {
         throw new ApiError(404, "User does not exist")
     }
 
+    // Check if the provided password is correct
     const isPasswordValid = await user.isPasswordCorrect(password);
 
     if (!isPasswordValid) {
         throw new ApiError(401, "password incorrect | Invalid user credentials");
     }
 
+    // Generate new access and refresh tokens
     const { accessToken, refreshToken } = await generateRefreshAndAccessTokens(user._id);
 
+    // Fetch the logged in user without password and refresh token
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
 
     const options = {
@@ -97,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
         secure: true
     };
 
- 
+    // Set access and refresh tokens as cookies and send the response
     return res
         .status(200)
         .cookie("accessToken", accessToken, options)
@@ -112,6 +122,7 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 
+// Controller function to logout a user
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(req.user?._id, {
         $unset: {
@@ -124,6 +135,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         secure: true
     };
 
+    // Clear access and refresh tokens cookies and send the response
     return res
         .status(200)
         .clearCookie("accessToken", options)
@@ -139,6 +151,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 
+// Controller function to change user's password
 const changePassword = asyncHandler(async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
@@ -149,12 +162,14 @@ const changePassword = asyncHandler(async (req, res) => {
     try {
         const user = await User.findById(req?.user.id);
 
+        // Check if the current password is correct
         const isValidPassword = await user.isPasswordCorrect(currentPassword);
 
         if (!isValidPassword) {
             throw new ApiError(401, "Authentication failed | Wrong password!")
         }
 
+        // Update the password and save the user
         user.password(newPassword);
         await user.save({ validateBeforeSave: false });
 
@@ -172,6 +187,7 @@ const changePassword = asyncHandler(async (req, res) => {
 })
 
 
+// Controller function to get the current user
 const getCurrentUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req?.user.id).select("-password -refreshToken");
     return res
@@ -179,6 +195,7 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, user, "User fetched successfully"));
 })
 
+// Controller function to update user details
 const updateUserDetails = asyncHandler(async (req, res) => {
     const { fullName, username } = req.body;
     const avatarLocalPath = req.file?.path;
@@ -211,6 +228,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
    }
 });
 
+// Controller function to refresh access token
 const refreshAccessToken = asyncHandler(async (req, res) => {
     const incomingRefreshToken =
       req.cookies.refreshToken || req.body.refreshToken;
