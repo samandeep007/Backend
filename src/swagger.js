@@ -6,9 +6,9 @@ const options = {
   definition: {
     openapi: '3.0.0', // OpenAPI version
     info: {
-      title: 'My API',
+      title: 'Notes API',
       version: '1.0.0',
-      description: 'A description of your API',
+      description: 'This is a Node.js application that provides a RESTful API for managing notes. It uses Express.js as the Ib framework, MongoDB as the database, and includes user authentication.',
     },
     servers: [
       {
