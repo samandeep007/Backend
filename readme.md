@@ -11,7 +11,7 @@ We chose Express.js for this Notes API application due to its:
 2. Flexibility in structuring the application, enabling us to organize routes and middleware as needed.
 3. Large and active community, providing extensive resources and third-party middleware.
 4. High performance and scalability, suitable for building robust RESTful APIs.
-5. Excellent compatibility with MongoDB and other Node.js packages we're using.
+5. Excellent compatibility with Mongo and other Node.js packages we're using.
 6. Middleware-based architecture, allowing easy integration of additional functionalities.
 7. Strong documentation and widespread industry adoption, ensuring long-term support and reliability.
 
